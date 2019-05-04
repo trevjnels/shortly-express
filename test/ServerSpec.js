@@ -139,10 +139,10 @@ describe('', function() {
         var queryString = 'SELECT * FROM users where username = "Samantha"';
         db.query(queryString, function(err, rows) {
           if (err) {
-            console.log("ERROR ALLERT!!!!! OMG NO ITS ON FIRE")
+            // console.log("ERROR ALLERT!!!!! OMG NO ITS ON FIRE")
             done(err); }
           var user = rows[0];
-          console.log('* * * * * * * * * * *  * * * * * * * * * * * * ');
+          // console.log('* * * * * * * * * * *  * * * * * * * * * * * * ');
           expect(user).to.exist;
           expect(user.username).to.equal('Samantha');
           done();
@@ -173,10 +173,10 @@ describe('', function() {
       });
     });
 
-    it('redirects to login if the user already exists', function(done) {
+    it('redirects to signup if the user already exists', function(done) {
       var options = {
         'method': 'POST',
-        'uri': 'http://127.0.0.1:4568/login',
+        'uri': 'http://127.0.0.1:4568/signup',
         'json': {
           'username': 'Samantha',
           'password': 'Samantha'
@@ -187,7 +187,7 @@ describe('', function() {
         if (error) { return done(error); }
         request(options, function(err, response, resBody) {
           if (err) { return done(err); }
-          expect(response.headers.location).to.equal('/login');
+          expect(response.headers.location).to.equal('/signup');
           done();
         });
       });
@@ -280,7 +280,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions Schema:', function() {
+  describe('Sessions Schema:', function() {
     it('contains a sessions table', function(done) {
       var queryString = 'SELECT * FROM sessions';
       db.query(queryString, function(err, results) {
@@ -328,7 +328,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Express Middleware', function() {
+  describe('Express Middleware', function() {
     var cookieParser = require('../server/middleware/cookieParser.js');
     var createSession = require('../server/middleware/auth.js').createSession;
 
@@ -483,7 +483,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions and cookies', function() {
+  describe('Sessions and cookies', function() {
     var requestWithSession;
     var cookieJar;
 
@@ -573,7 +573,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Privileged Access:', function() {
+  describe('Privileged Access:', function() {
 
     it('Redirects to login page if a user tries to access the main page and is not signed in', function(done) {
       request('http://127.0.0.1:4568/', function(error, res, body) {

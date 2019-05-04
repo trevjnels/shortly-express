@@ -78,91 +78,149 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
+app.get('/signup', (req,res)=>{
+  res.render('signup');
+})
+app.get('/login', (req,res)=>{
+  res.render('login');
+})
+
 app.post('/signup', (req, res, next) => {
-  console.log('signup working')
-  // console.log(req.body, "$ $$ $ $ $ $ $  $ $ $ RICK ROSS" )
-  if (req.body.username === undefined) {
-    // send back a 404 if link is not valid
-
-    return res.sendStatus(404);
-  }
-  var { username, password } = req.body;
-
-  return models.Users.get( {username })
-  .then(user => {
-    if (user) {
-
-      console.log('USER ALREADY EXISTS' ,user);
-
-      res.redirect('/login').end()
-      return;
-    }
-    return {
-      username: req.body.username,
-      password: req.body.password,
-    }
+  var { username, password } = req.body
+//check if user
+  models.Users.get({username})
+    .then(user => {
+      if (user){
+        throw user;
+      }else{
+        return models.Users.create({username, password});
+      }
   })
-  .error(error => {
-    res.status(500).send(error);
+  .then((user)=>{
+    res.redirect('/')
   })
-  .then(options =>   models.Users.create(options))
-  .then(user => {
-    // console.log('WE MADE A POST WEEEE')
-    res.status(201).send(user).end()
+  .catch( user => {
+    // alert('hello andy!!!!')
+  res.redirect('/signup')
   })
-
 });
 
-app.post('/login', (req, res, next) => {
-  // console.log("@@@@@@", req.body.username)
-  // console.log('@@@@@@', req.body.password)
-  // var {username, password } = req.body;
+app.post('/login', (req, res, next)=> {
+  var attemptedPassword = req.body.password;
+  var username = req.body.username;
 
-  return models.Users.get({ username: req.body.usename})
-  .then(user => {
-    console.log("here is our user", user.id)
-    console.log('hi')
-  })
+  models.Users.get({username})
+    .then( user => {
+      console.log("user is - - - - - - - - - - ", typeof user)
+      console.log("user KEYS are - - - - - - - - - - ", Object.keys(user))
 
-  // if (req.body.username === undefined) {
-
-  //   // send back a 404 if link is not valid
-  //   return res.sendStatus(404);
-  // }
-  // // models.users.get
-  // debugger;
-  // return models.Users.get({'username': req.body.username})
-  // .then((user)=>{
-  //   console.log('______ITSWORKING ON 133______')
-  //   console.log('____________', user, ' user____________')
-  // })
-  .error((e)=>{
-    // console.log('error on line 138 of app ', e);
-    res.sendStatus(403).end()
-  })
-  //.then user  = > take the propery off the user from the databse
-  // pass ingto compare
-  //if else compare result (true false)
-  //thens
-    // return models.Users.compare( password, hashedPasswordFromDBUser, salt ) // password is undefined
-    // .error(error => {
-    //   res.status(500).send(error);
-    // })
-    // .then((match)=>{
-    //   if (!match){
-    //     res.sendStatus(403).set({ location: '/login' }).end()
-    //     console.log('password did not match!')
-    //   }
-    //   // return res;
-    // })
-    .then(() => {
-
-        res.sendStatus(200).send("yay").set({ location: '/login' }).end()
-        // console.log('%%%% --- ', res.headers.location, '---%%%%')
+      var password = user.password;
+      var salt = user.salt;
+      console.log('PASSWORD PASSWORD: ', password)
+      console.log('SALT SALT SALT: ', salt)
+      return models.Users.compare(attemptedPassword, password, salt) //return true or false;
+    })
+    .then( validated => {
+      if(!validated){
+        throw "Password not valid"
+      } else {
+        res.redirect('/');
       }
-    )
-
+    })
+    .catch(err => {
+      console.log(err)
+      res.redirect('/login')
+    })
 })
+
+
+
+
+
+// if (req.body.username === undefined) {
+//   // send back a 404 if link is not valid
+
+//   return res.sendStatus(404);
+// }
+// var { username, password } = req.body;
+
+// return models.Users.get( {username })
+// .then(user => {
+//   if (user) {
+
+//     console.log('USER ALREADY EXISTS' ,user);
+
+//     res.redirect('/login').end()
+//     return;
+//   }
+//   return {
+//     username: req.body.username,
+//     password: req.body.password,
+//   }
+// })
+// .error(error => {
+//   res.status(500).send(error);
+// })
+// .then(options =>   models.Users.create(options))
+// .then(user => {
+//   // console.log('WE MADE A POST WEEEE')
+//   res.status(201).send(user).end()
+// })
+
+
+
+
+
+// app.post('/login', (req, res, next) => {
+//   // console.log("@@@@@@", req.body.username)
+//   // console.log('@@@@@@', req.body.password)
+//   // var {username, password } = req.body;
+
+//   return models.Users.get({ username: req.body.usename})
+//   .then(user => {
+//     console.log("here is our user", user.id)
+//     console.log('hi')
+//   })
+
+//   // if (req.body.username === undefined) {
+
+//   //   // send back a 404 if link is not valid
+//   //   return res.sendStatus(404);
+//   // }
+//   // // models.users.get
+//   // debugger;
+//   // return models.Users.get({'username': req.body.username})
+//   // .then((user)=>{
+//   //   console.log('______ITSWORKING ON 133______')
+//   //   console.log('____________', user, ' user____________')
+//   // })
+//   .error((e)=>{
+//     // console.log('error on line 138 of app ', e);
+//     res.sendStatus(403).end()
+//   })
+//   //.then user  = > take the propery off the user from the databse
+//   // pass ingto compare
+//   //if else compare result (true false)
+//   //thens
+//     // return models.Users.compare( password, hashedPasswordFromDBUser, salt ) // password is undefined
+//     // .error(error => {
+//     //   res.status(500).send(error);
+//     // })
+//     // .then((match)=>{
+//     //   if (!match){
+//     //     res.sendStatus(403).set({ location: '/login' }).end()
+//     //     console.log('password did not match!')
+//     //   }
+//     //   // return res;
+//     // })
+//     .then(() => {
+
+//         res.sendStatus(200).send("yay").set({ location: '/login' }).end()
+//         // console.log('%%%% --- ', res.headers.location, '---%%%%')
+//       }
+//     )
+
+// })
 
 
 

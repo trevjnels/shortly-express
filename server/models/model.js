@@ -61,7 +61,7 @@ class Model {
 //     queryString = queryString.replace('?', options.username);
 // }
     // SELECT * FROM users WHERE username = ? LIMIT 1
-    console.log("*~~ ~~~ ~ ~ ~ ~ ~ ~ ~ ~ ~ queryString", queryString);
+
     return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
   }
 
