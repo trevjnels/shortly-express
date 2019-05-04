@@ -41,7 +41,7 @@ class Users extends Model {
       salt,
       password: utils.createHash(password, salt)
     };
-
+    console.log("creating new user and adding to DB")
     return super.create.call(this, newUser);
   }
 }
