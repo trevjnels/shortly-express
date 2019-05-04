@@ -52,8 +52,16 @@ class Model {
    */
 
   get(options) {
+    // console.log('* *  * * *   OPTIONS:    * * * ', options);
     let parsedOptions = parseData(options);
+    // console.log('*****  PARSED DATA WEE', parsedOptions, '**** WEEEE')
     let queryString = `SELECT * FROM ${this.tablename} WHERE ${parsedOptions.string.join(' AND ')} LIMIT 1`;
+    // let queryString = `SELECT * FROM users WHERE username = ${options.username} LIMIT 1
+// if(options.username){
+//     queryString = queryString.replace('?', options.username);
+// }
+    // SELECT * FROM users WHERE username = ? LIMIT 1
+    console.log("*~~ ~~~ ~ ~ ~ ~ ~ ~ ~ ~ ~ queryString", queryString);
     return executeQuery(queryString, parsedOptions.values).then(results => results[0]);
   }
 
