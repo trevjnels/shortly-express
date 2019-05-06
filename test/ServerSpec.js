@@ -46,7 +46,7 @@ describe('', function() {
 
     /**************************************************************************************/
     /* TODO: If you create a new MySQL tables, add it to the tablenames collection below. */
-    /**************************************************************************************/  //
+    /**************************************************************************************/ //
     var tablenames = ['links', 'clicks', 'users', 'sessions'];
 
     db.connect(function(err) {
@@ -140,7 +140,8 @@ describe('', function() {
         db.query(queryString, function(err, rows) {
           if (err) {
             // console.log("ERROR ALLERT!!!!! OMG NO ITS ON FIRE")
-            done(err); }
+            done(err); 
+          }
           var user = rows[0];
           // console.log('* * * * * * * * * * *  * * * * * * * * * * * * ');
           expect(user).to.exist;
@@ -384,6 +385,7 @@ describe('', function() {
           expect(session).to.exist;
           expect(session).to.be.an('object');
           expect(session.hash).to.exist;
+          console.log('- - ----- YOU DID IT TREV- - - - - ');
           done();
         });
       });
