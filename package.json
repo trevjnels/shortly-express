@@ -20,7 +20,7 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-partials": "^0.3.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "mysql": "^2.12.0",
     "node-mocks-http": "^1.6.1",
     "request": "^2.34.0"
